@@ -4,8 +4,32 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from 'react-icons/fc';
 import BgVideo from '../assets/bg-video.mp4';
 import logo from '../assets/logo.png';
+import { client } from '../client';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const googleResponse = (response) => {
+        localStorage.setItem('user', JSON.stringify(response.profileObj));
+        
+        const {name, googleId, imageUrl} = response.profileObj;
+
+        const doc = {
+            _id: googleId,
+            _type: 'user',
+            userName: name,
+            image: imageUrl,
+        };
+
+        client.createIfnotExists(doc)
+        .then(() => {
+            navigate('/', {replace:true})
+        })
+    }
+
+    const handleLoginFailure = (error) => {
+        console.error("Login failed:", error);
+    };
+
     return (
         <div className="flex justify-start items-center flex-col h-screen">
             <div className="relative w-full h-full">
@@ -35,12 +59,8 @@ const Login = () => {
                                 <FcGoogle className="mr-2" /> Sign in
                             </button>
                         )}
-                        onSuccess={(response) => {
-                            console.log("Login was successful:", response);
-                        }}
-                        onFailure={(error) => {
-                            console.log("Login failed:", error);
-                        }}
+                        onSuccess={googleResponse}
+                        onFailure={handleLoginFailure}
                         cookiePolicy="single_host_origin"
                     />
                     </div>
