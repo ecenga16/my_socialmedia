@@ -29,9 +29,9 @@ const Home = () => {
 
     useEffect(() => {
         
-        scrollRef.current.scrollTo(0,0)
+        scrollRef.current.scrollTo(0,0);
 
-    }, [])
+    })
 
     return (
         <div className="flex bg-red-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out">
@@ -41,11 +41,11 @@ const Home = () => {
             <div className="flex md:hidden flex-row">
                 <div className="p-2 w-full flex flex-row  justify-between items-center shadow-md">
                     <HiMenu fontSize={40} className="cursor-pointer" onClick={() => setToggleSidebar(true)}/>
-                    <Link to={`user-profile/${user?._id}`}>
+                    <Link to="/">
                         <img src={Logo} alt="logo" className="w-28 p-3"/>
                     </Link>
                     <Link to={`user-profile/${user?._id}`}>
-                        <img src={user?.image} alt="logo" className="w-28 p-3"/>
+                        <img src={user?.image} alt="logo" className="w-9 h-9 rounded-full"/>
                     </Link>
                 </div>
                 {toggleSidebar && (
