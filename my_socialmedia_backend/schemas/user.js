@@ -3,15 +3,15 @@ export default {
     title: 'User',
     type: 'document',
     fields: [
-        {
-            name: 'userName',
-            title: 'userName',
-            type: 'string'
-        },
-        {
-            name: 'image',
-            title: 'Image',
-            type: 'string',
-        }
-    ]
-}
+      {
+        name: 'userName',
+        title: 'UserName',
+        type: 'string',
+      },
+      {
+        name: 'image',
+        title: 'Image',
+        type: 'string',
+      },
+    ],
+  };
