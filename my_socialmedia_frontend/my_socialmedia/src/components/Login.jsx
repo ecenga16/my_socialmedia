@@ -5,8 +5,16 @@ import { FcGoogle } from 'react-icons/fc';
 import BgVideo from '../assets/bg-video.mp4';
 import logo from '../assets/logo.png';
 import { client } from '../client';
+import { gapi } from "gapi-script";
+
 
 const Login = () => {
+    gapi.load("client:auth2", () => {
+        gapi.client.init({
+          clientId:process.env.REACT_APP_GOOGLE_API_TOKEN,
+          plugin_name: "chat",
+        });
+      });
     const navigate = useNavigate();
     const googleResponse = (response) => {
         localStorage.setItem('user', JSON.stringify(response.profileObj));
@@ -20,7 +28,7 @@ const Login = () => {
             image: imageUrl,
         };
 
-        client.createIfnotExists(doc)
+        client.createIfNotExists(doc)
         .then(() => {
             navigate('/', {replace:true})
         })
@@ -48,7 +56,7 @@ const Login = () => {
                     </div>                   
                     <div className="shadow-2xl">
                     <GoogleLogin
-                        clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+                        clientId={`${process.env.REACT_APP_GOOGLE_API_TOKEN}`}
                         render={(renderProps) => (
                             <button
                                 type="button"
