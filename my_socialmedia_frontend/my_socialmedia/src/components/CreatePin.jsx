@@ -39,6 +39,41 @@ const CreatePin = ({ user }) => {
             }
         };
 
+        const savePin = () => {
+            if (title && about && destination && imageAsset?._id && category) {
+                const doc = {
+                    _type: 'pin',
+                    title,
+                    about,
+                    destination,
+                    image: {
+                        _type: 'image',
+                        asset: {
+                            _type: 'reference',
+                            _ref: imageAsset?._id
+                        }
+                    },
+                    userId: user._id,
+                    postedBy: {
+                        _type: 'postedBy',
+                        _ref: user._id,
+                    },
+                    category,
+                };
+        
+                client.create(doc)
+                    .then(() => {
+                        navigate('/');
+                    })
+                    .catch((error) => {
+                        console.error('Error saving pin:', error);
+                    });
+            } else {
+                setFields(true);
+                setTimeout(() => setFields(false), 2000);
+            }
+        };
+
     return (
         <div className="flex flex-col justify-center items-center mt-5 lg:h-4/5">
             {fields && (
@@ -89,6 +124,65 @@ const CreatePin = ({ user }) => {
                          </div>
                         )}
                     </div>
+                </div>
+                <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value)
+                        }}
+                        placeholder="Enter title"
+                        className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-400 p-2"
+                    />
+                    {user && (
+                        <div className="flex gap-2 my-2 items-center rounded-lg">
+                            <img src={user.image}
+                                    className="w-10 h-10 rounded-full"
+                                    alt="user-profile"/>
+                        </div>
+                    )}
+                    <input
+                        type="text"
+                        value={about}
+                        onChange={(e) => {
+                            setAbout(e.target.value)
+                        }}
+                        placeholder="What is about?"
+                        className="outline-none text-base sm:text-lg font-bold border-b-2 border-gray-400 p-2"
+                    />
+                    <input
+                        type="text"
+                        value={destination}
+                        onChange={(e) => {
+                            setDestination(e.target.value)
+                        }}
+                        placeholder="What is the destination link?"
+                        className="outline-none text-base sm:text-lg font-bold border-b-2 border-gray-400 p-2"
+                    />
+                    <div className="flex flex-col">
+                        <p className="mb-2 font-semibold text-lg sm:text-xl">Choose Pin Category</p>
+                        <select onChange={(e) => setCategory(e.target.value)}
+                                className="outline-none w-4/5 text-base botder-b-2 border-gray-400 p-2 rounded-md cursor-pointer" 
+
+                       >    
+                            <option value="other" className="bg-white">Select category</option>
+                            {categories.map((category) => {
+                                <option className="text-base border-0 outline-none capitalize text-black bg-white">
+                                    {category.name}
+                                </option>
+                            })}
+                        </select>
+                    </div>
+                        <div className="flex justify-end items-end mt-5">
+                            <button 
+                                type="button"
+                                onClick={savePin}
+                                className="bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none "
+                            >
+                                Save Pin
+                            </button>
+                        </div>
                 </div>
             </div>
         </div>
